@@ -3,14 +3,22 @@
 class Connection
 
 {
+
         // Static = something that is going to help anyone without any instance work
-        public static function make()
+        public static function make($config)
+
         {
 
-            try
-            {
+          try {
 
-              return new PDO('mysql:host=127.0.0.1;dbname=mytodo','root',' ');
+            return new PDO(
+
+                $config['connection'].';dbname='.$config['name'],
+                $config['username'],
+                $config['password'],
+                $config['options']
+
+	 	);
 
             }
 
@@ -21,7 +29,7 @@ class Connection
                 echo($e->getMessage());
                 die('<br/> Could not connect');
 
-        }
+            }
 
         }
 
