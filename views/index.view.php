@@ -10,9 +10,9 @@
   
   <ul>
 
-    <li><a href="/about.php">About Page</a></li>
+    <li><a href="views/about.view.php">About Page</a></li>
 
-    <li><a href="/contact.php">Contact Page</a></li> 
+    <li><a href="views/contact.view.php">Contact Page</a></li> 
 
   </ul>
 

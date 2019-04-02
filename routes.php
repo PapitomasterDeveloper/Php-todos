@@ -1,11 +1,11 @@
 <?php 
 
-$routes = define([
+$router->define([
 
-        '' = 'controllers/index.php',
+        '' => 'controllers/index.php',
         'about' => 'controllers/about.php',
-        'about/culture' => controllers/about-culture.php',
-        'contact => controllers/contact.php'
+        'about/culture' => 'controllers/about-culture.php',
+        'contact' => 'controllers/contact.php'
 
 ]);
 
