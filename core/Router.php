@@ -1,83 +1,79 @@
 <?php
 
+namespace App\Core;
+
 class Router
 
 {
 
-  public $routes = [
+    public $routes = [
 
-	'GET' => [],
-	'POST' => []
+        'GET' => [],
+        'POST' => []
 
-	];
+    ];
 
-  public static function load($file)
+    public static function load($file)
 
-  {
+    {
 
-    $router = new static;
+        $router = new static;
 
-    require $file;
+        require $file;
 
-    return $router;
+        return $router;
 
-  }
+    }
 
+    public function get($uri, $controller)
 
-	public function get($uri, $controller)
+    {
 
-	{
+        $this->routes['GET'][$uri] = $controller;
 
-		$this->routes['GET'][$uri] = $controller;
+    }
 
-	}
+    public function post($uri, $controller)
 
-	public function post($uri, $controller)
+    {
 
-        {
+        $this->routes['POST'][$uri] = $controller;
 
-                $this->routes['POST'][$uri] = $controller;
+    }
+
+    public function direct($uri, $requestType)
+
+    {
+
+        if (array_key_exists($uri, $this->routes[$requestType])) {
+
+            return $this->callAction(
+                ...explode('@', $this->routes[$requestType][$uri])
+            );
 
         }
 
-	public function direct($uri, $requestType)
+        throw new Exception('No route defined for this URI.');
 
-	{
+    }
 
-		if(array_key_exists($uri, $this->routes[$requestType]))
+    protected function callAction($controller, $action)
 
-		{
+    {
 
-			return $this->callAction(
+        $controller = "App\\Controllers\\{$controller}";
+        $controller = new $controller;
 
-				...explode('@', $this->routes[$requestType][$uri])
+        if (! method_exists($controller, $action)) {
 
-			);
+            throw new Exception(
+                "{$controller} does not respond to the {$action} action."
+            );
 
-		}
+        }
 
-		throw new Exception('No route defined for this URI.');
+        return $controller->$action();
 
-	}
-
-	private function callAction($controller, $action)
-
-	{
-
-		$controller = new $controller;
-
-		if (! method_exists($controller, $action))
-
-		{
-
-			throw new Exception ("($controller) doest not respond to the ($action) action.");
-
-		}
-
-		return $controller->$action();
-
-	}
+    }
 
 }
-
-?>

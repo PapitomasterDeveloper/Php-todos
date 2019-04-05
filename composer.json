@@ -1,17 +1,15 @@
 {
 
-	"autoload":
+    "autoload": {
 
-	{
+      "classmap": [
 
-		"classmap":
+        "./"
 
-		[
+      ],
 
-			"./"
+      "files": ["core/helpers.php"]
 
-		]
-
-	}
+    }
 
 }

@@ -1,72 +1,76 @@
-<?php 
+<?php
+
+namespace App\Core\Database;
+
+use PDO;
 
 class QueryBuilder
 
 {
 
-	protected $pdo;
+    protected $pdo;
 
-	public function __construct($pdo)
+    /**
+     * Create a new QueryBuilder instance.
+     *
+     * @param PDO $pdo
+     */
+    public function __construct($pdo)
+
+    {
+
+        $this->pdo = $pdo;
+
+    }
+
+    /**
+     * Select all records from a database table.
+     *
+     * @param string $table
+     */
+    public function selectAll($table)
+
+    {
+
+        $statement = $this->pdo->prepare("select * from {$table}");
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_CLASS);
+
+    }
+
+    /**
+     * Insert a record into a table.
+     *
+     * @param  string $table
+     * @param  array  $parameters
+     */
+    public function insert($table, $parameters)
+
+    {
+
+        $sql = sprintf(
+            'insert into %s (%s) values (%s)',
+            $table,
+            implode(', ', array_keys($parameters)),
+            ':' . implode(', :', array_keys($parameters))
+        );
+
+        try
 
 	{
 
-		$this->pdo = $pdo;
+            $statement = $this->pdo->prepare($sql);
 
-	}
+            $statement->execute($parameters);
 
-	public function selectAll($table)
+        }
 
-	{
-
-		$statement = $this->pdo->prepare("select * from {$table}");
-
-        	$statement->execute();
-
-       		// Fetching results in an array fashion
-       	 	// dd($statement->fetchAll());
-
-        	// Fetching results in an object fashion
-        	return $statement->fetchAll(PDO::FETCH_CLASS);
-        	// return $statement->fetchAll(PDO::FETCH_CLASS, 'Task');
-
-	}
-
-	public function insert($table, $parameters)
+	catch (Exception $e)
 
 	{
 
-		$sql = sprintf(
-
-			'insert into %s (%s) values (%s)',
-
-			$table,
-
-			implode(', ', array_keys($parameters)),
-
-			':' . implode(', :', array_keys($parameters))
-
-		);
-
-		try
-
-			{
-
-				$statement = $this->pdo->prepare($sql);
-
-				$statement->execute($parameters);
-
-			}
-
-		catch(Exception $ex)
-
-			{
-
-				die($ex->getMessage());
-
-			}
-
-	}
-
+        }
+    }
 }
-
-?>

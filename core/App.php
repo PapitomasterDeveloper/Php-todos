@@ -1,35 +1,35 @@
 <?php
 
+namespace App\Core;
+
 class App
 
 {
 
-	protected static $registery = [];
+    protected static $registry = [];
 
-	public static function bind($key, $value)
 
-	{
+    public static function bind($key, $value)
 
-		static::$registery[$key] = $value;
+    {
 
-	}
+        static::$registry[$key] = $value;
 
-	public static function get($key)
+    }
 
-	{
 
-		if (! array_key_exists($key, static::$registery)) 
+    public static function get($key)
 
-		{
+    {
 
-			throw new Exception("No {$key} is bound in the container.");
+        if (! array_key_exists($key, static::$registry)) {
+            throw new Exception("No {$key} is bound in the container.");
 
-		}
+        }
 
-		return static::$registery[$key];
 
-	}
+        return static::$registry[$key];
+
+    }
 
 }
-
-?>

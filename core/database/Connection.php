@@ -1,40 +1,38 @@
 <?php
 
+namespace App\Core\Database;
+
+use PDO;
+use PDOException;
+
 class Connection
 
 {
 
-        // Static = something that is going to help anyone without any instance work
-        public static function make($config)
+    public static function make($config)
 
-        {
+    {
 
-          try {
+        try
 
-            return new PDO(
+	{
 
+	    return new PDO(
                 $config['connection'].';dbname='.$config['name'],
                 $config['username'],
                 $config['password'],
                 $config['options']
+            );
+        }
 
-	 	);
+	catch (PDOException $e)
 
-            }
+	{
 
-            catch(PDOException $e)
-
-            {
-
-                echo($e->getMessage());
-                die('<br/> Could not connect');
-
-            }
+            die($e->getMessage());
 
         }
 
+    }
+
 }
-
-?>
-
-
