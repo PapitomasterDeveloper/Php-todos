@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class Router
 
@@ -48,11 +48,33 @@ class Router
 
 		{
 
-			return $this->routes[$requestType][$uri];
+			return $this->callAction(
+
+				...explode('@', $this->routes[$requestType][$uri])
+
+			);
 
 		}
 
 		throw new Exception('No route defined for this URI.');
+
+	}
+
+	private function callAction($controller, $action)
+
+	{
+
+		$controller = new $controller;
+
+		if (! method_exists($controller, $action))
+
+		{
+
+			throw new Exception ("($controller) doest not respond to the ($action) action.");
+
+		}
+
+		return $controller->$action();
 
 	}
 
